@@ -1,0 +1,146 @@
+#main-navbar{
+  background-color: #e3f2fd;
+}
+/*  Menambah efek border-bottom untuk navbar  */
+#main-navbar .nav-link{
+  border-bottom: 5px solid #e3f2fd;
+  color: black;
+}
+#main-navbar .nav-link:hover, #main-navbar a.active {
+  border-bottom: 5px solid #117a8b;
+  color: black;
+}
+
+/* Set warna text-info dan btn-info agar sedikit lebih gelap */
+.text-info{   
+  color: #17a2b8 !important;  
+  text-decoration: none;
+}  
+.text-info:hover{   
+  color: #138496 !important;  
+}  
+.btn-info {
+  border-color: #17a2b8;
+  background-color: #17a2b8;
+}
+.btn-info:hover {
+  background-color: #138496;
+  border-color: #117a8b;
+}
+.pesan-error{
+  font-size: 0.8em;
+}
+
+/*-- Nonaktifkan XXL Breakpoint (agar container tidak terlalu lebar) --*/
+@media (min-width: 1200px) {
+  .container {
+      max-width: 1140px;
+  }
+}
+
+@media (min-width: 991.98px){
+  main{padding-left: 240px;}
+}
+.wrapper {
+  display: flex;
+  width: 100%;
+  margin-top: 25px;
+  min-height: calc(100vh-60px);
+}
+#sidebar {
+  min-width: 250px;
+  position: fixed;
+  top: 120px;
+  left: 0;
+  background-color: #e3f2fd;
+  color: #117a8b;
+  transition: all 0.3s;
+}
+#sidebar.active {
+  margin-left: -250px;
+}
+#sidebar ul.components {
+  padding: 20px 0;;
+}
+#sidebar ul li a {
+  padding: 10px;
+  font-size: 1.1em;
+  display: block;
+  text-decoration: none;
+  color: black;
+}
+#sidebar ul li a:hover {
+  color: #2C5F2D;
+  background-color: #fff;
+  text-decoration: none;
+}
+#sidebar ul li.active>a{
+  background-color: #117a8b;
+  color: #ffffff;
+  text-decoration: none;
+}
+#main {
+  width: 100%;
+  padding: 20px;
+  min-width: 100vh;
+  transition: all 0.3s;
+  margin-left: 250px;
+  min-height: 1000px;
+}
+.thumb-wrapper {
+  margin-top: 15px;
+  padding: 25px 15px;
+  background: #fff;
+  border-radius: 6px;
+  text-align: center;
+  height: 320px;
+  position: relative;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+.img-box {
+  height: 120px;
+  margin-bottom: 20px;
+  width: 100%;
+  position: relative;
+}
+.img-fluid {
+  max-width: 100%;
+  max-height: 100%;
+  display: inline-block;
+  position: absolute;
+  bottom: 0;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+}
+h4{
+  font-size: 18px;
+}
+.thumb-content .btn {
+  color: #117a8b;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: bold;
+  background: none;
+  border: 1px solid #117a8b;
+  padding: 6px 14px;
+  margin-top: 0px;
+  margin-bottom: 30px;
+  line-height: 16px;
+  border-radius: 20px;
+} 
+.thumb-content .btn:hover, .thumb-content .btn:focus{
+  color: #fff;
+  background: #117a8b;
+  box-shadow: none;
+}
+.item-price {
+  font-size: 13px;
+  padding: 2px 0;
+  margin-bottom: 3px;
+}
+.item-discount {
+  color: red;
+  font-size: 13px;
+  padding: 2px 0;
+}
