@@ -66,7 +66,7 @@ CREATE TABLE `bibit_tanaman` (
 
 LOCK TABLES `bibit_tanaman` WRITE;
 /*!40000 ALTER TABLE `bibit_tanaman` DISABLE KEYS */;
-INSERT INTO `bibit_tanaman` VALUES ('A001','Bibit Mangga Harum Manis','Bibit mangga harum manis berasal dari perkembang biakan biji. Cepat berbuah dan lebat. Rasa buahnya manis. Daging buah tebal. Bisa ditanam di pot atau di tanah.','bibit_tanaman/A001.jpg',10000,500),('A002','Kakao','Bibit kakao unggul, berbuah lebat. Tinggi bibit sekitar 40cm. Mudah ditanam. Bisa berbuah di usia 1-2 tahun.','bibit_tanaman/A002.jpg',10000,300),('A003','Durian Montong','Durian montong, dikembangkan melalui perkawinan. Ditanam didalam polybag. Mudah dirawat dan cepat berbuah.','bibit_tanaman/A003.jpg',10000,20),('A004','Jeruk Bali A','Bibit jeruk bali, dikembangkan melalui perkawinan. Ditanam didalam polybag. Mudah dirawat dan cepat berbuah.','bibit_tanaman/A004.jpeg',10000,0);
+INSERT INTO `bibit_tanaman` VALUES ('A001','Bibit Mangga Harum Manis','Bibit mangga harum manis berasal dari perkembang biakan biji. Cepat berbuah dan lebat. Rasa buahnya manis. Daging buah tebal. Bisa ditanam di pot atau di tanah.','bibit_tanaman/A001.jpg',10000,500),('A002','Kakao','Bibit kakao unggul, berbuah lebat. Tinggi bibit sekitar 40cm. Mudah ditanam. Bisa berbuah di usia 1-2 tahun.','bibit_tanaman/A002.jpg',10000,300),('A003','Durian Montong','Durian montong, dikembangkan melalui perkawinan. Ditanam didalam polybag. Mudah dirawat dan cepat berbuah.','bibit_tanaman/A003.jpg',10000,20),('A004','Jeruk Bali A','Bibit jeruk bali, dikembangkan melalui perkawinan. Ditanam didalam polybag. Mudah dirawat dan cepat berbuah.','bibit_tanaman/A004.jpg',10000,0);
 /*!40000 ALTER TABLE `bibit_tanaman` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -106,10 +106,10 @@ DROP TABLE IF EXISTS `chat`;
 CREATE TABLE `chat` (
   `id_chat` varchar(7) NOT NULL,
   `pesan` varchar(500) DEFAULT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   `baca` int(1) DEFAULT NULL,
   `id_pengirim` varchar(4) DEFAULT NULL,
-  `id_penerima` varchar(4) DEFAULT NULL,
+  `id_conversation` varchar(4) DEFAULT NULL,
   PRIMARY KEY (`id_chat`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -120,7 +120,34 @@ CREATE TABLE `chat` (
 
 LOCK TABLES `chat` WRITE;
 /*!40000 ALTER TABLE `chat` DISABLE KEYS */;
+INSERT INTO `chat` VALUES ('G000001','Selamat pagi','2024-08-13 03:05:47',0,'D001','H001'),('G000002','Perkenalkan saya Arnalis, saya ingin bertanya mengenai pesanan bibit ibu.','2024-08-13 03:07:55',0,'D001','H001'),('G000003','Apakah ibu jadi memesan bibit jeruk balinya?','2024-08-13 03:08:20',0,'D001','H001'),('G000004','Selamat pagi juga pak','2024-08-13 03:08:55',0,'P001','H001'),('G000005','Selamat pagi bapak','2024-08-13 03:11:54',0,'D001','H002'),('G000006','Pagi pak, ada yang bisa saya bantu?','2024-08-13 03:12:54',0,'P002','H002');
 /*!40000 ALTER TABLE `chat` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `conversation`
+--
+
+DROP TABLE IF EXISTS `conversation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `conversation` (
+  `id_conversation` varchar(4) NOT NULL,
+  `id_pengirim` varchar(4) DEFAULT NULL,
+  `id_penerima` varchar(4) DEFAULT NULL,
+  `tgl_submit` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id_conversation`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `conversation`
+--
+
+LOCK TABLES `conversation` WRITE;
+/*!40000 ALTER TABLE `conversation` DISABLE KEYS */;
+INSERT INTO `conversation` VALUES ('H001','D001','P001','2024-08-13 03:04:15'),('H002','D001','P002','2024-08-13 03:09:58');
+/*!40000 ALTER TABLE `conversation` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -370,4 +397,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-08 10:53:16
+-- Dump completed on 2024-08-15 16:48:02
