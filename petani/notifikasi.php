@@ -29,36 +29,36 @@
 
     <script>
 
-      // $(document).ready(function(){
-      //   //updating the view with notificaiton using ajax
-      //   function load_notifications(view = '', tipe = ''){
+      $(document).ready(function(){
+        //updating the view with notificaiton using ajax
+        function load_notifications(view = '', tipe = ''){
 
-      //     $.ajax({
-      //       url:"fetch.php",
-      //       method: "POST",
-      //       // data:{view:view, tipe:tipe},
-      //       dataType: "json",
-      //       success:function(data){
-      //         $('.list-notifikasi').html(data.notification);
-      //       }
-      //     });
-      //   }
+          $.ajax({
+            url:"fetch.php",
+            method: "POST",
+            // data:{view:view, tipe:tipe},
+            dataType: "json",
+            success:function(data){
+              $('.list-notifikasi').html(data.notification);
+            }
+          });
+        }
 
-      //   load_notifications('', 2);
+        load_notifications('', 2);
 
-      //   //click menu notifikasi
-      //   $(document).on('click', '.menu-notifikasi', function(){
-      //     $('.count').html('');
-      //     load_notifications('yes', 2);
-      //   });
+        //click menu notifikasi
+        $(document).on('click', '.menu-notifikasi', function(){
+          $('.count').html('');
+          load_notifications('yes', 2);
+        });
 
-      //   setInterval(function(){
-      //     load_notifications('', 2);
-      //   }, 5000);
+        setInterval(function(){
+          load_notifications('', 2);
+        }, 5000);
 
-      // });
+      });
     </script>
 
 <?php
-  require '../template/footer.php';
+  require '../template/footer2.php';
 ?>

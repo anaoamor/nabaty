@@ -223,5 +223,5 @@ require '../template/header2.php';
       });
     </script>
 <?php
-require '../template/footer.php';
+require '../template/footer2.php';
 ?>

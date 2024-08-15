@@ -189,5 +189,5 @@
     </script>
 
 <?php 
-  require '../template/footer.php';
+  require '../template/footer2.php';
 ?>

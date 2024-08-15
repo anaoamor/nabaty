@@ -67,5 +67,5 @@ require '../template/header1.php';
 	</div>
 
 <?php
-require '../template/footer.php';
+require '../template/footer1.php';
 ?>
