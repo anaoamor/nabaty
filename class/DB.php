@@ -14,6 +14,7 @@ class DB{
   private $_orderBy = "";
   private $_limit = "";
   private $_count = 0;
+  private $_groupBy = ""; //For grouping chat from conversation
 
   // Constructor untuk pembuatan PDO Object
   private function __construct(){
@@ -60,6 +61,12 @@ class DB{
   // Method untuk menentukan urutan hasil tabel (query ORDER BY)
   public function orderBy($columnName, $sortType = 'ASC'){
     $this->_orderBy = "ORDER BY {$columnName} {$sortType}";
+    return $this;
+  }
+
+  //Grouping rows with same values into summary rows
+  public function groupBy($columnName){
+    $this->_groupBy = "GROUP BY {$columnName}";
     return $this;
   }
 
@@ -111,7 +118,7 @@ class DB{
     return $this->get($tableName,$queryLike,[$search]);
   }
 
-  //Method untuk mengambil isi 2 tabel
+  //Method untuk mengambil isi 2 tabel Left Join
   public function getLeftJoinTwoTables($tableName1, $tableName2, $columnJoin, $condition = "", $bindValue = []){
     $query = "SELECT {$this->_columnName} FROM {$tableName1} LEFT JOIN {$tableName2} ON {$tableName1}.{$columnJoin} = {$tableName2}.{$columnJoin} {$condition} {$this->_orderBy}";
     $_columnName = "*";
