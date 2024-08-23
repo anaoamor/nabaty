@@ -57,11 +57,11 @@ if(count($unread_id) != 0){
 }
 $output .= "</div>";
 
-$output .= "<form action='add_chat.php' method='post' class='chat-form' autocomplete='off'>";
+$output .= "<form action='add_chat.php' method='POST' class='chat-form' >"; //autocomplete='off'
 $output .= "<div class='card-footer text-muted d-flex justify-content-start align-items-center p-2'>";
 $output .= "<div class='input-group align-items-center mb-0 h-25'>";
 $output .= "<input type='text' class='form-control h-25 fs-6' placeholder='Message' name='pesan' required>";
-$output .= "<input type='hidden' name='id_conversation' value='{$_GET['id_conversation']}'>";
+$output .= "<input type='hidden' name='id_conversation' value='{$conversation->id_conversation}'>";
 $output .= "<button class='btn btn-outline' style='padding-top: .55rem;'><i class='fa-solid fa-paper-plane fa-lg'></i></buton>";
 $output .= "</div>";
 $output .= "</div>";
