@@ -96,7 +96,7 @@
         //   load_unseen_notification('', 1);
         // }, 5000);
       });
-      //Check whether calling function from outsise jquery $(document) in setInterval()
+      //Check whether calling function from outsise jquery $(document) in setInterval() can be done
 
       //Variable for chat widget
       let currentChatTab = 1;
@@ -254,12 +254,21 @@
             //Chat submit event handler
             chatWidgetInputMsg.onsubmit = event => {
               event.preventDefault();
-              //Execute POST AJAX request that will send the captured chat to the server and insert it into the database
-              fetch(chatWidgetInputMsg.action, {
-                cache : 'no-store',
-                method: 'POST',
-                body: new FormData(chatWidgetInputMsg)
-              });
+              //Check if white space is entered
+              if(chatWidgetInputMsg.querySelector("input").value.trim() === ""){
+                console.log("Can't sending empty chat");
+              } else {
+                //Execute POST AJAX request that will send the captured chat to the server and insert it into the database
+                fetch(chatWidgetInputMsg.action, {
+                  cache : 'no-store',
+                  method: 'POST',
+                  body: new FormData(chatWidgetInputMsg)
+                })
+                .then(response => response.text())
+                .then(text => console.log(text))
+                .catch(error => console.error('Error:', error));
+              }
+              
               //Create the new chat element
               let inputChatValue = chatWidgetInputMsg.querySelector('input').value;
               let nowTime = new Date();

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+      let chatId = [];
+
+      //Onclick event handler to open chat button
+      document.querySelector('.open-chat-widget').onclick = event => {
+        event.preventDefault();
+        //Execute the initialize chat function
+        initChat();
+      };
+
+      //Initialize chat function - handle all aspects of the chat widget
+      const initChat = () => {
+
+        //Show the chat widget
+        document.querySelector('.chat-widget').style.display = 'flex';
+        //Animate the chat widget
+        document.querySelector('.chat-widget').getBoundingClientRect();
+        document.querySelector('.chat-widget').classList.add('open');
+        //Close button OnClick event handler
+        document.querySelector('.close-chat-widget-btn').onclick = event => {
+          event.preventDefault();
+          //Close the chat
+          document.querySelector('.chat-widget').classList.remove('open');
+          chatId.length = 0;
+        };
+
+        //Load conversation list
+
+        //Previous tab button onClick event handler
+      };
+
+      //Load conversation list function
+      const loadConversationList = () => {
+        fetch('conversations.php', { cache: 'no-store'})
+        .then(response => {
+          if(!response.ok){
+            throw new Error("Network response was not oke "+response.statusText);
+          }
+          return response.json();
+        })
+        .then(data => {
+          //If the unread data equals 0, display empty string in count badge
+          unreadChat = data.unread;
+          if(unreadChat !== 0){
+            document.querySelector(".count").innerHTML = "<strong>"+unreadChat+"</strong>";
+          }else {
+            document.querySelector(".count").innerHTML = '';
+          }
+
+          //Display conversation list
+          document.querySelector('.chat-widget-conversations-tab').innerHTML = data.output_conversation;
+          //Execute the conversation handler function
+          // conversationHandler();
+        })
+        .catch(error => {
+          console.error("There was a problem with the fetch operation:", error);
+        })
+      }
+  </script>
+</body>
+</html>
