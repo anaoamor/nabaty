@@ -105,7 +105,6 @@
       let deleteNode = document.getElementById("delete");
       let chatId = [];
 
-      console.log(deleteNode);
       //Onclick event handler to open chat button
       document.querySelector('.open-chat-widget').onclick = event => {
         event.preventDefault();
@@ -139,7 +138,7 @@
           event.preventDefault();
           //update the readed messages before out from tab 2
           if(currentChatTab == 2 && idConversation){
-            // fetch("update_read.php?id="+idConversation, {cache:"no-store"});
+            fetch("update_read.php?id_conversation="+idConversation, {cache:"no-store"});
           }
           //Transition to the respective page
           selectChatTab(currentChatTab-1);
@@ -245,9 +244,9 @@
             document.querySelector(".chat-widget-messages").addEventListener("scroll", (event) => {
               if((Math.abs(document.querySelector(".chat-widget-messages").scrollHeight - document.querySelector(".chat-widget-messages").clientHeight - document.querySelector(".chat-widget-messages").scrollTop) <= 1) && document.querySelector(".unread-badge") ){
                 document.querySelector(".unread-badge").textContent = '';
-                // fetch(`update_read.php?id=${idConversation}`, {
-                //   cache: 'no-store'
-                // });
+                fetch(`update_read.php?id_conversation=${idConversation}`, {
+                  cache: 'no-store'
+                });
               }
             });
 
@@ -255,9 +254,7 @@
             chatWidgetInputMsg.onsubmit = event => {
               event.preventDefault();
               //Check if white space is entered
-              if(chatWidgetInputMsg.querySelector("input").value.trim() === ""){
-                console.log("Can't sending empty chat");
-              } else {
+              if(chatWidgetInputMsg.querySelector("input").value.trim() !== ""){
                 //Execute POST AJAX request that will send the captured chat to the server and insert it into the database
                 fetch(chatWidgetInputMsg.action, {
                   cache : 'no-store',
@@ -265,21 +262,33 @@
                   body: new FormData(chatWidgetInputMsg)
                 })
                 .then(response => response.text())
-                .then(text => console.log(text))
+                .then(text => { 
+                  if(text.includes('success')){
+                    //Create the new chat element
+                    let inputChatValue = chatWidgetInputMsg.querySelector('input').value;
+                    let nowTime = new Date();
+                    let chatWidgetMsg = "<div class='user-chat d-flex flex-row mb-0 justify-content-end'><div><p class='small p-1 mb-0 rounded-3 me-1 bg-primary text-white' style='font-size:14px;'>"+inputChatValue+"</p><p class='small mb-0 rounded-3 text-muted d-flex justify-content-end me-1' style='font-size:10px;'>"+nowTime.getHours()+":"+nowTime.getMinutes()+"</p></div></div>";
+                    //Add the element to the chat container, right at the bottom
+                    document.querySelector('.chat-widget-messages').innerHTML = document.querySelector('.chat-widget-messages').innerHTML + chatWidgetMsg;
+                    //Reset the message element
+                    chatWidgetInputMsg.querySelector('input').value = '';
+                    //Scroll to the bottom of the messages container
+                    document.querySelector('.chat-widget-messages').scrollTop = document.querySelector('.chat-widget-messages').lastElementChild.offsetTop;
+                  }
+                })
                 .catch(error => console.error('Error:', error));
               }
-              
-              //Create the new chat element
-              let inputChatValue = chatWidgetInputMsg.querySelector('input').value;
-              let nowTime = new Date();
-              let chatWidgetMsg = "<div class='user-chat d-flex flex-row mb-0 justify-content-end'><div><p class='small p-1 mb-0 rounded-3 me-1 bg-primary text-white' style='font-size:14px;'>"+inputChatValue+"</p><p class='small mb-0 rounded-3 text-muted d-flex justify-content-end me-1' style='font-size:10px;'>"+nowTime.getHours()+":"+nowTime.getMinutes()+"</p></div></div>";
-              //Add the element to the chat container, right at the bottom
-              document.querySelector('.chat-widget-messages').innerHTML = document.querySelector('.chat-widget-messages').innerHTML + chatWidgetMsg;
-              //Reset the message element
-              chatWidgetInputMsg.querySelector('input').value = '';
-              //Scroll to the bottom of the messages container
-              document.querySelector('.chat-widget-messages').scrollTop = document.querySelector('.chat-widget-messages').lastElementChild.offsetTop;
+
             };
+
+            //Remove highlight and delete button when form input (chatWidgetInputMsg) is in focused
+            document.querySelector(".form-control.h-25.fs-6").addEventListener("focus", () => {
+              deleteNode.classList.remove("display");
+              document.querySelectorAll(".user-chat").forEach(element => {
+                element.querySelector(".small.p-1.mb-0.rounded-3.me-1").classList.remove("opacity-50");
+              });
+              chatId.length = 0;
+            });
           }
 
           //Give long press event listener to display delete button
@@ -334,6 +343,37 @@
           console.error("There was a problem with the fetch operation:", error);
         });
       };
+
+      //Delete button event handler
+      deleteNode.addEventListener("click", function(e) {
+        fetch("delete_chat.php", {
+        cache : 'no-store',
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(chatId)
+        })
+        .then(response => {
+          if(!response.ok){
+            throw new Error("Network response was not ok "+response.status);
+          }
+
+          return response.json();
+        })
+        .then(data => {
+          if(data.message == "OK"){
+            for(let id of chatId){
+              document.querySelector(`[data-id='${id}']`).remove();
+            }
+            chatId.splice(0);
+            deleteNode.classList.remove("display");
+          }
+        })
+        .catch(error => {
+          console.error("There was problem with fetch operation ",error);
+        });
+      });
 
       loadConversationList();
     </script>
