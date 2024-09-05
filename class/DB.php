@@ -4,8 +4,8 @@ class DB{
   // Property untuk koneksi ke database mysql
   private $_host = '127.0.0.1';
   private $_dbname = 'nabaty';
-  private $_username = '';
-  private $_password = '';
+  private $_username = 'moriza';
+  private $_password = 'pororo0857';
 
   // Property internal dari class DB
   private static $_instance = null;
@@ -197,11 +197,33 @@ class DB{
     return true;
   }
 
+  //Method to update table data with two more conditions (UPDATE)
+  public function updateConditions($tableName, $data, $conditions){
+    $query = "UPDATE {$tableName} SET ";
+    foreach($data as $key => $val){
+      $query .= "$key = $val, ";
+    }
+    $query = substr($query, 0, -2)." WHERE ";
+    for($i = 0; $i < count($conditions); $i++){
+      $query .= "{$conditions[$i][0]} {$conditions[$i][1]} ? AND";
+    }
+    $query = substr($query, 0, -4);
+    return $query;
+  }
+
   // Method untuk menghapus data tabel (query DELETE)
   public function delete($tableName, $condition){
     $query = "DELETE FROM {$tableName} WHERE {$condition[0]} {$condition[1]} ? ";
     $this->_count = $this->runQuery($query,[$condition[2]])->rowCount();
     return true;
+  }
+
+  // Method to delete a data array (DELETE ... WHERE ... IN)
+  public function deleteDataArray($tableName, $condition){
+    $placeholder = '('.str_repeat('?,', count($condition[1])-1) . '?)';
+    $query = "DELETE FROM {$tableName} WHERE {$condition[0]} IN {$placeholder}";
+    $this->_count = $this->runQuery($query, $condition[1])->rowCount();
+    return $this->_count;
   }
 
   public function beginTransaction(){

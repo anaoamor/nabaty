@@ -23,11 +23,6 @@
       $this->_formItem['id_conversation'] = $validate->setRules('id_conversation', 'ID Conversation', [
         'required' => true
       ]);
-      
-      echo "<pre>";
-      print_r($this->_formItem);
-      echo "</pre>";
-      echo $this->getItem('pesan');
       if(!$validate->passed()){
         return $validate->getError();
       }
@@ -58,6 +53,11 @@
       ];
 
       return $this->_db->insert('chat', $newChat);
+    }
+
+    //Delete some chats using their ids
+    public function deleteChats($chatIds){
+      return $this->_db->deleteDataArray('chat', ['id_chat', $chatIds]);
     }
   }
 ?>
