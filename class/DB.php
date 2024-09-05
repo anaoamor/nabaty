@@ -2,10 +2,10 @@
 class DB{
 
   // Property untuk koneksi ke database mysql
-  private $_host = '127.0.0.1';
-  private $_dbname = 'nabaty';
-  private $_username = 'moriza';
-  private $_password = 'pororo0857';
+  private $_host = '';
+  private $_dbname = '';
+  private $_username = '';
+  private $_password = '';
 
   // Property internal dari class DB
   private static $_instance = null;
