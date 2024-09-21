@@ -2,10 +2,10 @@
 class DB{
 
   // Property untuk koneksi ke database mysql
-  private $_host = '';
-  private $_dbname = '';
-  private $_username = '';
-  private $_password = '';
+  private $_host = '127.0.0.1';
+  private $_dbname = 'nabaty';
+  private $_username = 'moriza';
+  private $_password = 'pororo0857';
 
   // Property internal dari class DB
   private static $_instance = null;
@@ -201,14 +201,18 @@ class DB{
   public function updateConditions($tableName, $data, $conditions){
     $query = "UPDATE {$tableName} SET ";
     foreach($data as $key => $val){
-      $query .= "$key = $val, ";
+      $query .= "$key = ?, ";
     }
     $query = substr($query, 0, -2)." WHERE ";
+    $dataValues = array_values($data);
     for($i = 0; $i < count($conditions); $i++){
-      $query .= "{$conditions[$i][0]} {$conditions[$i][1]} ? AND";
+      $query .= "{$conditions[$i][0]} {$conditions[$i][1]} ? AND ";
+      $dataValues[] = $conditions[$i][2];
     }
-    $query = substr($query, 0, -4);
-    return $query;
+    $query = substr($query, 0, -5);
+    
+    $this->_count = $this->runQuery($query,$dataValues)->rowCount();
+    return $this->_count;
   }
 
   // Method untuk menghapus data tabel (query DELETE)

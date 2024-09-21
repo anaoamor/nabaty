@@ -59,5 +59,13 @@
     public function deleteChats($chatIds){
       return $this->_db->deleteDataArray('chat', ['id_chat', $chatIds]);
     }
+
+    //Update chat is readed based on idConversation
+    public function updateRead($idConversation, $idUser){
+      return $this->_db->updateConditions("chat", ['baca' => 1], 
+        [['id_conversation', '=', $idConversation],
+        ['id_pengirim', '!=', $idUser]]
+      );
+    }
   }
 ?>
