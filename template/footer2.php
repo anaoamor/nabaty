@@ -74,8 +74,11 @@
           });
         }
 
-        load_unseen_notification('', 1);    
-        load_notifications('', 2);      
+        load_unseen_notification('', 1);  
+        if((window.location.pathname).substr(-14) == "notifikasi.php"){
+          load_notifications('yes', 2);  
+        }  
+        
 
         //click notifications navbar and load new notifications
         $(document).on('click', '.dropdown-toggle', function(){
@@ -89,12 +92,66 @@
         });
 
         //automatically fetch notification
-        // setInterval(function(){
-        //   if((window.location.pathname).substr(-14) == "notifikasi.php"){
-        //     load_notifications('yes', 2);  
-        //   }
-        //   load_unseen_notification('', 1);
-        // }, 5000);
+        setInterval(function(){
+          if((window.location.pathname).substr(-14) == "notifikasi.php"){
+            load_notifications('yes', 2);  
+          }
+          load_unseen_notification('', 1);
+          loadConversationList();
+
+          // If the current tab is 2 and the conversation ID variable is not NUll  
+          if (currentChatTab == 2 && idConversation != null) {
+            //The following variable will prevent the messages container from automatically scrolling to the bottom if the user previously scrolled up in the chat list
+            let canScroll = true;
+            if(document.querySelector(".chat-widget-messages").lastElementChild && document.querySelector(".chat-widget-messages").scrollHeight - document.querySelector(".chat-widget-messages").scrollTop != document.querySelector(".chat-widget-messages").clientHeight){
+              canScroll = false;
+            }
+            getConversation(idConversation, false, canScroll);
+            // Use AJAX to update the conversation
+            // fetch('conversation.php?id_conversation='+idConversation, {cache: 'no-store'})
+            // .then(response => {
+            //   if(!response.ok){
+            //     throw new Error("Network response was not ok"+response.statusText);
+            //   }
+            //   return response.json();
+            // })
+            // .then (data => {
+            //   //The following variable will prevent the messages container from automatically scrolling to the bottom if the user previously scrolled up in the chat list
+            //   let canScroll = true;
+            //   if(document.querySelector(".chat-widget-messages").lastElementChild && document.querySelector(".chat-widget-messages").scrollHeight - document.querySelector(".chat-widget-messages").scrollTop != document.querySelector(".chat-widget-messages").clientHeight){
+            //     canScroll = false;
+            //   }
+
+            //   let newChat = (new DOMParser().parseFromString(data.output_chat, 'text/html'));
+            //   //Update the content
+            //   if(document.querySelector(".chat-widget-messages").childNodes.length !== newChat.querySelector(".chat-widget-messages").childNodes.length){
+            //     console.log("hai");
+            //     if(newChat.querySelector("p.m-0")) {
+            //       document.querySelector(".chat-widget-messages").innerHTML = newChat.querySelector(".chat-widget-messages").innerHTML;
+            //       document.querySelector(".unread-badge").textContent = newChat.querySelector(".unread-badge").innerHTML;
+            //     }else {
+            //       document.querySelector(".chat-widget-messages").innerHTML = newChat.querySelector(".chat-widget-messages").innerHTML;
+            //     }
+              
+            //     if(canScroll && document.querySelector(".chat-widget-messages").lastElementChild){
+            //       //Scroll to the bottom of the container
+            //       document.querySelector(".chat-widget-messages").scrollTop = document.querySelector(".chat-widget-messages").lastElementChild.offsetTop;
+            //     }
+            //   }
+
+            //   if(document.querySelector(".unread-badge")){
+            //     document.querySelector(".unread-badge").onclick = (event) => {
+            //       event.preventDefault();
+            //       document.querySelector(".chat-widget-messages").scrollTop = document.querySelector(".notif-label").offsetTop - 50;
+            //     };
+            //   }
+            // })
+            // .catch(error => {
+            //   console.error("There was a problem with the fetch operation:", error);
+            // });               
+                    
+          }
+        }, 5000);
       });
       //Check whether calling function from outsise jquery $(document) in setInterval() can be done
 
@@ -125,6 +182,11 @@
           event.preventDefault();
           //Close the chat
           document.querySelector('.chat-widget').classList.remove('open');
+          if(idConversation !== null){
+            fetch(`update_read.php?id_conversation=${idConversation}`, {
+              cache: 'no-store'
+            });
+          }
           selectChatTab(1);
           chatId.length = 0;
         };
@@ -197,14 +259,13 @@
           element.onclick = event => {
               event.preventDefault();
               // Get the conversation
-              getConversation(element.dataset.id);
+              getConversation(element.dataset.id, true, true);
           };
         });
       };
 
       // Get conversation function - execute an AJAX request that will retrieve the conversation based on the conversation ID column
-      const getConversation = id_conversation => {
-
+      const getConversation = (id_conversation, firstInit, canScroll) => {
         //Execute GET AJAX request
         fetch(`conversation.php?id_conversation=${id_conversation}`, {cache: 'no-store'})
         .then(response => {
@@ -217,20 +278,15 @@
           //Update conversation ID variable
           idConversation = id_conversation;
 
-          //For deleting chats
-          let start, end, diff;
-          var longpress = false;
-          
-          //Display chatting partner name
-          document.querySelector('.mb-0.fw-bold').innerHTML = data.nama_partner;
-          //Populate the chats in conversation tab content
-          document.querySelector('.chat-widget-conversation-tab').innerHTML = data.output_chat;
-          //Transition to the conversation tab (tab 3)
-          selectChatTab(2);
-          //Retrieve the input chat form element
-          let chatWidgetInputMsg = document.querySelector('.chat-form');
-          //If the element exists
-          if(chatWidgetInputMsg){
+          //For first initiatiion
+          if(firstInit) {
+            //Display chatting partner name
+            document.querySelector('.mb-0.fw-bold').innerHTML = data.nama_partner;
+            //Populate the chats in conversation tab content
+            document.querySelector('.chat-widget-conversation-tab').innerHTML = data.output_chat;
+            //Transition to the conversation tab (tab 2)
+            selectChatTab(2);
+
             //If there are unread chat
             if(document.querySelector(".notif-label")){
               document.querySelector(".chat-widget-messages").scrollTop = document.querySelector(".notif-label").offsetTop - 50;
@@ -239,6 +295,25 @@
             else if(document.querySelector('.chat-widget-messages').lastElementChild) {
               document.querySelector('.chat-widget-messages').scrollTop = document.querySelector('.chat-widget-messages').lastElementChild.offsetTop;
             }
+          } else { //For chat update
+            let newChat = (new DOMParser().parseFromString(data.output_chat, 'text/html'));
+            //Update the content
+            if(document.querySelector(".chat-widget-messages").childNodes.length !== newChat.querySelector(".chat-widget-messages").childNodes.length){
+              
+              document.querySelector(".unread-badge").textContent = newChat.querySelector(".unread-badge").innerHTML;
+              document.querySelector(".chat-widget-messages").innerHTML = newChat.querySelector(".chat-widget-messages").innerHTML;
+            
+              if(canScroll && document.querySelector(".chat-widget-messages").lastElementChild){
+                //Scroll to the bottom of the container
+                document.querySelector(".chat-widget-messages").scrollTop = document.querySelector(".chat-widget-messages").lastElementChild.offsetTop;
+              }
+            }
+          }
+          
+          //Retrieve the input chat form element
+          let chatWidgetInputMsg = document.querySelector('.chat-form');
+          //If the element exists
+          if(chatWidgetInputMsg){
 
             //If the new chat are scrolled until the bottom
             document.querySelector(".chat-widget-messages").addEventListener("scroll", (event) => {
@@ -274,6 +349,8 @@
                     chatWidgetInputMsg.querySelector('input').value = '';
                     //Scroll to the bottom of the messages container
                     document.querySelector('.chat-widget-messages').scrollTop = document.querySelector('.chat-widget-messages').lastElementChild.offsetTop;
+
+                    getConversation(idConversation,true, true);
                   }
                 })
                 .catch(error => console.error('Error:', error));
@@ -291,58 +368,72 @@
             });
           }
 
-          //Give long press event listener to display delete button
-          document.querySelectorAll(".user-chat").forEach(element => {
-            element.addEventListener("click", (e) => {
-              if(longpress){
-                //Display the delete button if chatId list are empty
-                if(chatId.length == 0){
-                  deleteNode.classList.add("display");
-                }
-                
-                //Add or remove the long pressed messages
-                var chosenPstn = chatId.indexOf(element.dataset.id);
-                if(chosenPstn == -1){
-                  chatId.push(element.dataset.id);
-                  element.querySelector(".small.p-1.mb-0.rounded-3.me-1").classList.add("opacity-50");
-                }else{
-                  chatId.splice(chosenPstn, 1);
-                  element.querySelector(".small.p-1.mb-0.rounded-3.me-1").classList.remove("opacity-50");
-                }
-              }
-              //If only short click
-              else if(!longpress && chatId.length !== 0){
-                //Check wheter the clicked message in message array or not
-                var chosenPstn = chatId.indexOf(element.dataset.id);
-                if(chosenPstn == -1){
-                  chatId.push(element.dataset.id);
-                  element.querySelector(".small.p-1.mb-0.rounded-3.me-1").classList.add("opacity-50");
-                }else{
-                  chatId.splice(chosenPstn,1);
-                  element.querySelector(".small.p-1.mb-0.rounded-3.me-1").classList.remove("opacity-50");
-                }
-              }
-
-              //If there is no message selected
-              if(chatId.length === 0){
-                deleteNode.classList.remove("display");
-              }
-            });
-
-            element.addEventListener("mousedown", () => {
-              start = new Date().getTime();
-            });
-
-            element.addEventListener("mouseup", () => {
-              end = new Date().getTime();
-              longpress = (end - start < 500) ? false : true;
-            });
+          //Display the unread chat, when unread badge is clicked
+          document.querySelector(".unread-badge").addEventListener("click", () => {
+            document.querySelector(".chat-widget-messages").scrollTop = document.querySelector(".notif-label").offsetTop - 50;
           });
+
+          chatPress();
+          
         })
         .catch(error => {
           console.error("There was a problem with the fetch operation:", error);
         });
       };
+
+      //Give long press event listener to display delete button
+      const chatPress = () => {
+        //For deleting chats
+        let start, end, diff;
+        var longpress = false;
+
+        document.querySelectorAll(".user-chat").forEach(element => {
+          element.addEventListener("click", (e) => {
+            if(longpress){
+              //Display the delete button if chatId list are empty
+              if(chatId.length == 0){
+                deleteNode.classList.add("display");
+              }
+              
+              //Add or remove the long pressed messages
+              var chosenPstn = chatId.indexOf(element.dataset.id);
+              if(chosenPstn == -1){
+                chatId.push(element.dataset.id);
+                element.querySelector(".small.p-1.mb-0.rounded-3.me-1").classList.add("opacity-50");
+              }else{
+                chatId.splice(chosenPstn, 1);
+                element.querySelector(".small.p-1.mb-0.rounded-3.me-1").classList.remove("opacity-50");
+              }
+            }
+            //If only short click
+            else if(!longpress && chatId.length !== 0){
+              //Check wheter the clicked message in message array or not
+              var chosenPstn = chatId.indexOf(element.dataset.id);
+              if(chosenPstn == -1){
+                chatId.push(element.dataset.id);
+                element.querySelector(".small.p-1.mb-0.rounded-3.me-1").classList.add("opacity-50");
+              }else{
+                chatId.splice(chosenPstn,1);
+                element.querySelector(".small.p-1.mb-0.rounded-3.me-1").classList.remove("opacity-50");
+              }
+            }
+
+            //If there is no message selected
+            if(chatId.length === 0){
+              deleteNode.classList.remove("display");
+            }
+          });
+
+          element.addEventListener("mousedown", () => {
+            start = new Date().getTime();
+          });
+
+          element.addEventListener("mouseup", () => {
+            end = new Date().getTime();
+            longpress = (end - start < 500) ? false : true;
+          });
+        });
+      }
 
       //Delete button event handler
       deleteNode.addEventListener("click", function(e) {
