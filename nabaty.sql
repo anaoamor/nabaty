@@ -120,7 +120,7 @@ CREATE TABLE `chat` (
 
 LOCK TABLES `chat` WRITE;
 /*!40000 ALTER TABLE `chat` DISABLE KEYS */;
-INSERT INTO `chat` VALUES ('G000001','Selamat pagi','2024-08-13 03:05:47',0,'D001','H001'),('G000002','Perkenalkan saya Arnalis, saya ingin bertanya mengenai pesanan bibit ibu.','2024-08-13 03:07:55',0,'D001','H001'),('G000003','Apakah ibu jadi memesan bibit jeruk balinya?','2024-08-13 03:08:20',0,'D001','H001'),('G000004','Selamat pagi juga pak','2024-08-13 03:08:55',0,'P001','H001'),('G000005','Selamat pagi bapak','2024-08-13 03:11:54',0,'D001','H002'),('G000006','Pagi pak, ada yang bisa saya bantu?','2024-08-13 03:12:54',0,'P002','H002');
+INSERT INTO `chat` VALUES ('G000001','Selamat pagi','2024-08-13 03:05:47',0,'D001','H001'),('G000002','Perkenalkan saya Arnalis, saya ingin bertanya mengenai pesanan bibit ibu.','2024-08-13 03:07:55',0,'D001','H001'),('G000003','Apakah ibu jadi memesan bibit jeruk balinya?','2024-08-13 03:08:20',0,'D001','H001'),('G000004','Selamat pagi juga pak','2024-08-13 03:08:55',1,'P001','H001'),('G000005','Selamat pagi bapak','2024-08-13 03:11:54',0,'D001','H002'),('G000006','Pagi pak, ada yang bisa saya bantu?','2024-08-13 03:12:54',1,'P002','H002'),('G000007','hAI','2024-09-20 09:33:41',1,'P002','H002'),('G000008','HELLO SIR','2024-09-20 09:34:18',0,'D001','H002'),('G000012','WHAT\'S UP','2024-09-21 13:39:21',1,'P002','H002'),('G000013','A','2024-09-21 13:40:32',0,'D001','H002');
 /*!40000 ALTER TABLE `chat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,7 +259,7 @@ CREATE TABLE `notifikasi` (
 
 LOCK TABLES `notifikasi` WRITE;
 /*!40000 ALTER TABLE `notifikasi` DISABLE KEYS */;
-INSERT INTO `notifikasi` VALUES (0000001,0000001,NULL,'2024-05-26 10:33:45',1,'tgl_pemesanan','D001'),(0000002,0000002,NULL,'2024-05-27 10:50:50',1,'tgl_pemesanan','D001'),(0000003,0000001,NULL,'2024-05-28 15:47:22',1,'pembaruan','D001'),(0000004,0000001,NULL,'2024-05-28 15:51:22',1,'pembatalan','D001'),(0000005,0000001,NULL,'2024-05-28 15:52:22',1,'selesai','D001'),(0000006,0000001,NULL,'2024-05-28 15:52:22',1,'pengembalian','D001'),(0000007,NULL,'A004','2024-05-28 16:51:35',1,'kosong','D001'),(0000008,0000001,NULL,'2024-05-28 15:52:22',1,'pengembalian','D001'),(0000009,0000001,NULL,'2024-05-28 15:52:22',1,'pengembalian','D001'),(0000010,0000002,NULL,'2024-05-31 12:51:50',1,'pembaruan','D001');
+INSERT INTO `notifikasi` VALUES (0000001,0000001,NULL,'2024-05-26 10:33:45',1,'tgl_pemesanan','D001'),(0000002,0000002,NULL,'2024-05-27 10:50:50',1,'tgl_pemesanan','D001'),(0000003,0000001,NULL,'2024-05-28 15:47:22',1,'pembaruan','D001'),(0000004,0000001,NULL,'2024-05-28 15:51:22',1,'pembatalan','D001'),(0000005,0000001,NULL,'2024-05-28 15:52:22',1,'selesai','D001'),(0000006,0000001,NULL,'2024-05-28 15:52:22',1,'pengembalian','D001'),(0000007,NULL,'A004','2024-05-28 16:51:35',1,'kosong','D001'),(0000008,0000001,NULL,'2024-05-28 15:52:22',1,'pengembalian','D001'),(0000009,0000001,NULL,'2024-05-28 15:52:22',1,'pengembalian','D001'),(0000010,0000002,NULL,'2024-05-31 12:51:50',0,'pembaruan','D001');
 /*!40000 ALTER TABLE `notifikasi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -397,4 +397,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-23 16:58:42
+-- Dump completed on 2024-09-21 21:02:23
