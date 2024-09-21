@@ -53,13 +53,17 @@ foreach($chats as $date => $chatGroup){
   }
 }
 if(count($unread_id) != 0){
-  $output .= "<p class='m-0'><span class='badge unread-badge text-muted position-absolute translate-middle-x border rounded-circle' style='background-color:#bed6f3; font-size:8px; right:0em; bottom:10em;'>".count($unread_id)."</span></p>";
+  $output .= "<p class='m-0'><span class='badge unread-badge text-muted position-absolute translate-middle-x border rounded-circle' style='background-color:#bed6f3; font-size:8px; right:0.3em; bottom:10em;'>".count($unread_id)."</span></p>";
+} else {
+  $output .= "<p class='m-0'><span class='badge unread-badge text-muted position-absolute translate-middle-x border rounded-circle' style='background-color:#bed6f3; font-size:8px; right:0.3em; bottom:10em;'></span></p>";
 }
+
 $output .= "</div>";
 
 $output .= "<form action='add_chat.php' method='POST' class='chat-form' >"; //autocomplete='off'
 $output .= "<div class='card-footer text-muted d-flex justify-content-start align-items-center p-2'>";
 $output .= "<div class='input-group align-items-center mb-0 h-25'>";
+$output .= "<div class='dialog' style='display:none'><span id='chat-error'>Chat masih kosong</span></div>";
 $output .= "<input type='text' class='form-control h-25 fs-6' placeholder='Message' name='pesan' required>";
 $output .= "<input type='hidden' name='id_conversation' value='{$conversation->id_conversation}'>";
 $output .= "<button class='btn btn-outline' style='padding-top: .55rem;'><i class='fa-solid fa-paper-plane fa-lg'></i></buton>";
