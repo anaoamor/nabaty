@@ -1,5 +1,4 @@
 <?php
-<?php
 //Run init.php (to autoloading)
 require '../init.php';
 
