@@ -1,0 +1,4 @@
+ private $_host = '127.0.0.1';
+private $_dbname = 'nabaty';
+private $_username = 'moriza';
+private $_password = 'pororo0857';
