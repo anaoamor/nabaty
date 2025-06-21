@@ -262,6 +262,7 @@ class DB{
     for($i = 1; $i<count($joinArray); $i++){
       $query .= " {$joinArray[$i][0]} {$joinArray[$i][1][1]} ON {$joinArray[$i][1][0]}.{$joinArray[$i][2]} = {$joinArray[$i][1][1]}.{$joinArray[$i][2]}";
     }
+    $query .= " {$conditions} {$this->_orderBy} {$this->_limit}";
     $this->_columnName = "*";
     $this->_orderBy = "";
     $this->_limit = "";
