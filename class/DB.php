@@ -267,10 +267,11 @@ class DB{
     $this->_orderBy = "";
     $this->_limit = "";
     return $this->getQuery($query, $bindValue);
-    return $query;
+  }
 
-    // $query = "SELECT {$this->_columnName} FROM {$tableName} {$condition} {$this->_orderBy} {$this->_limit}";
-    
+  //Method to get data from multiple tables and conditions
+  public function getMultipleTableConditions($joinArray, $conditions, $operators = []){
+    //check whether the $operators var is empty or not
   }
   
   // Method untuk menghapus data tabel (query DELETE)
