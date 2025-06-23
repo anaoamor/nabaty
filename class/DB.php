@@ -272,6 +272,19 @@ class DB{
   //Method to get data from multiple tables and conditions
   public function getMultipleTableConditions($joinArray, $conditions, $operators = []){
     //check whether the $operators var is empty or not
+    if(count($operators) === 0){
+      $conditionQuery = " WHERE {$conditions[0]} {$conditions[1]} ?";
+      return $this->getMultipleTable($joinArray, $conditionQuery, [$conditions[2]]);
+    }
+    else{
+      $conditionQuery = " WHERE {$conditions[0][0]} {$conditions[0][1]} ?";
+      $bindValue = [$conditions[0][2]];
+      for($i = 0; $i < count($operators); $i++){
+        $conditionQuery .= " {$operators[$i]} {$conditions[$i+1][0]} {$conditions[$i+1][1]} ?";
+        $bindValue[] = $conditions[$i+1][2];
+      }
+      return $this->getMultipleTable($joinArray, $conditionQuery, $bindValue);
+    }
   }
   
   // Method untuk menghapus data tabel (query DELETE)
