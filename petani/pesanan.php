@@ -8,16 +8,13 @@ $petani->cekPetaniSession();
 
 //create connection to database
 $DB = DB::getInstance();
-// $DB->select("id_pesanan, tgl_pemesanan, total_pembayaran, nama_pelanggan");
-$DB->select("pesanan.id_pesanan, pesanan.tgl_pemesanan, pesanan.total_pembayaran, bibit_tanaman.nama, pelanggan.nama_pelanggan");
+$DB->select("pesanan.id_pesanan, pesanan.tgl_pemesanan, pesanan.total_pembayaran, pelanggan.nama_pelanggan, (SELECT SUM(jumlah_pesan) 
+FROM bibit_tanaman_dipesan WHERE id_pesanan = pesanan.id_pesanan ) AS item");
 $DB->orderBy('id_pesanan', 'DESC');
 
 //show the pesanan list first based on 'Perlu Dikirm' state, create an initial page variable to hold selected table base
-// $pesananRecord = $DB->getInnerJoinTwoTables('pesanan', 'pelanggan', 'id_pelanggan');
 
-$pesananRecord = $DB->getMultipleTable([['INNER JOIN', ['pesanan', 'pelanggan'], 'id_pelanggan'],
-                              ['INNER JOIN', ['pesanan', 'bibit_tanaman_dipesan'], 'id_pesanan'],
-                              ['INNER JOIN', ['bibit_tanaman_dipesan', 'bibit_tanaman'], 'id_bibit_tanaman']]);
+$pesananRecord = $DB->getMultipleTableConditions([['INNER JOIN', ['pesanan', 'pelanggan'], 'id_pelanggan']], ["pesanan.status_pesanan", "=", 1], []);
 var_dump($pesananRecord);
 
 require '../template/header2.php';
@@ -58,7 +55,7 @@ require '../template/header2.php';
         <tr>
           <th>ID Pesanan</th>
           <th>Waktu</th>
-          <th>Produk</th>
+          <th>Item</th>
           <th>Pelanggan</th>
           <th>Total Pembayaran</th>
           <th>Status</th>
@@ -73,7 +70,7 @@ require '../template/header2.php';
             <tr id="<?=$pesanan->id_pesanan?>">
               <td class="selectable"><?=$pesanan->id_pesanan?></td>
               <td class="selectable"><?=$pesanan->tgl_pemesanan?></td>
-              <td>Bibit Mangga Harum Manis<br>Bibit Kokoa
+              <td><?=$pesanan->item?>
               </td>
               <td class="selectable"><?=$pesanan->nama_pelanggan?></td>
               <td class="selectable">Rp<?=number_format($pesanan->total_pembayaran,2,'.','.')?></td>
