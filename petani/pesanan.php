@@ -42,12 +42,12 @@ require '../template/header2.php';
 
     <!-- Sub menu to choose transaction option -->
     <nav class="navbar navbar-light py-4">
-      <a href="#" class="nav-link text-black">Semua Pesanan</a>
-      <a href="#" class="nav-link text-black">Perlu Dikirm</a>
-      <a href="#" class="nav-link text-black">Dikirm</a>
-      <a href="#" class="nav-link text-black">Selesai</a>
-      <a href="#" class="nav-link text-black">Pembatalan</a>
-      <a href="#" class="nav-link text-black">Pembelian</a>
+      <a href="#" data-status = "0" class="nav-link text-black">Semua Pesanan</a>
+      <a href="#" data-staus = "1" class="nav-link text-black">Perlu Dikirim</a>
+      <a href="#" data-status = "2" class="nav-link text-black">Dikirim</a>
+      <a href="#" data-status = "3" class="nav-link text-black">Selesai</a>
+      <a href="#" data-status = "4" class="nav-link text-black">Pembatalan</a>
+      <a href="#" data-status = "5" class="nav-link text-black">Pengembalian</a>
     </nav>
 
     <table class="table table-striped align-middle mt-3">
@@ -99,6 +99,7 @@ require '../template/header2.php';
 
 </div>
 <script>
+  //create event listener to connect a table row to a specific pesanan detail
   var pesananList = document.getElementsByClassName("selectable");
   console.log(pesananList.length);
   for(let i = 0; i<pesananList.length; i++){
@@ -108,8 +109,15 @@ require '../template/header2.php';
     console.log(pesananList[i]);
   }
   
-  //execute search query using keyword and state options
-  var statusTab = "Dikirim??";
+  //execute search query using keyword
+  //create pagination to large result from server
+  
+  //  display table based on state options
+  var currentTab = 1;
+  function displayPesanan(status){
+    let request = new XMLHTTPRequest();
+    request.open()
+  }
 </script>
 <?php
 require '../template/footer2.php';
