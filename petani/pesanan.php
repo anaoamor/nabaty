@@ -115,6 +115,9 @@ require '../template/header2.php';
   //  display table based on state options
   var currentTab = 1;
   let tableBodyNode = document.getElementById("table-body");
+  const fetchPesanan = async (status) =>{
+    
+  }
   function displayPesanan(status){
     let request = new XMLHttpRequest();
     request.open("GET", "pesanan_controller.php?status=", false);
