@@ -23,7 +23,7 @@ require '../template/header2.php';
 <!-- Main Content -->
 <div id="main">
   
-  <div class="container">
+  <div id="container" class="container">
 
     <div class="row justify-content-center">
       <div class="col-auto py-2">
@@ -43,7 +43,7 @@ require '../template/header2.php';
     <!-- Sub menu to choose transaction option -->
     <nav class="navbar navbar-light py-4">
       <a href="#" data-status = "0" class="nav-link text-black">Semua Pesanan</a>
-      <a href="#" data-staus = "1" class="nav-link text-black">Perlu Dikirim</a>
+      <a href="#" data-status = "1" class="nav-link text-black">Perlu Dikirim</a>
       <a href="#" data-status = "2" class="nav-link text-black">Dikirim</a>
       <a href="#" data-status = "3" class="nav-link text-black">Selesai</a>
       <a href="#" data-status = "4" class="nav-link text-black">Pembatalan</a>
@@ -62,7 +62,7 @@ require '../template/header2.php';
           <th>Aksi</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="table-body">
         <?php
           if(!empty($pesananRecord)): 
             foreach($pesananRecord as $pesanan){
@@ -114,10 +114,21 @@ require '../template/header2.php';
   
   //  display table based on state options
   var currentTab = 1;
+  let tableBodyNode = document.getElementById("table-body");
   function displayPesanan(status){
-    let request = new XMLHTTPRequest();
-    request.open()
+    let request = new XMLHttpRequest();
+    request.open("GET", "pesanan_controller.php?status=", false);
+    request.send();
+    let pesanan = JSON.parse(request.responseText);
+    let recordsHtml = "";
+    for(let record of pesanan){
+      recordsHtml += `<tr id=\"${record.id_pesanan}\"><td>${record.id_pesanan}</td><td>${record.tgl_pemesanan}</td><td>${record.item}</td><td>${record.nama_pelanggan}</td><td>${record.total_pembayaran}</td><td>Perlu Dikirim</td><td><a href=\"#\" class=\"btn btn-info btn-sm text-white\">Lihat</a></td></tr>`
+    }
+    tableBodyNode.innerHTML += recordsHtml;
+    console.log(pesanan);
+    // containerDiv.innerHTML += request.responseText;
   }
+  displayPesanan(0);
 </script>
 <?php
 require '../template/footer2.php';
