@@ -65,7 +65,7 @@
 				<li class="menu-notifikasi <?php echo substr(basename($_SERVER['PHP_SELF']), -14) == 'notifikasi.php' ? 'active' : ''; ?>">
 					<a href="notifikasi.php">Notifikasi</a>
 				</li>
-				<li classs="<?php echo substr(basename($_SERVER['PHP_SELF']), -11) === 'pesanan.php' ? 'active' : ''?>">
+				<li class="<?php echo substr(basename($_SERVER['PHP_SELF']), -11) == 'pesanan.php' ? 'active' : ''?>">
 					<a href="pesanan.php">Transaksi Penjualan</a>
 				</li>
 				<li>

@@ -116,22 +116,25 @@ require '../template/header2.php';
   var currentTab = 1;
   let tableBodyNode = document.getElementById("table-body");
   const fetchPesanan = async (status) =>{
-    
-  }
-  function displayPesanan(status){
-    let request = new XMLHttpRequest();
-    request.open("GET", "pesanan_controller.php?status=", false);
-    request.send();
-    let pesanan = JSON.parse(request.responseText);
-    let recordsHtml = "";
-    for(let record of pesanan){
-      recordsHtml += `<tr id=\"${record.id_pesanan}\"><td>${record.id_pesanan}</td><td>${record.tgl_pemesanan}</td><td>${record.item}</td><td>${record.nama_pelanggan}</td><td>${record.total_pembayaran}</td><td>Perlu Dikirim</td><td><a href=\"#\" class=\"btn btn-info btn-sm text-white\">Lihat</a></td></tr>`
+    try{
+      let response = await fetch(`pesanan_controller.php?status=`);
+      if(!response.ok){
+        throw new Error(`Terjadi kesalahan dengan kode : ${response.status}`);
+      }
+      let pesanan = await response.json();
+      // let pesanan = data.data;
+      let recordsHtml = "";
+      for(let record of pesanan){
+        recordsHtml += `<tr id=\"${record.id_pesanan}\"><td>${record.id_pesanan}</td><td>${record.tgl_pemesanan}</td><td>${record.item}</td><td>${record.nama_pelanggan}</td><td>Rp${record.total_pembayaran.toLocaleString('id-ID')}</td><td>Perlu Dikirim</td><td><a href=\"#\" class=\"btn btn-info btn-sm text-white\">Lihat</a></td></tr>`;
+      }
+      tableBodyNode.innerHTML += recordsHtml;
+      console.log(pesanan);
+    }catch(error){
+      console.log(error);
     }
-    tableBodyNode.innerHTML += recordsHtml;
-    console.log(pesanan);
-    // containerDiv.innerHTML += request.responseText;
   }
-  displayPesanan(0);
+
+  fetchPesanan(0);
 </script>
 <?php
 require '../template/footer2.php';
