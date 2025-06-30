@@ -30,8 +30,8 @@ require '../template/header2.php';
     </div>
 
     <!-- Sub menu to choose transaction option -->
-    <nav class="navbar navbar-light py-4">
-      <a href="#" data-status = "0" class="status-nav nav-link text-black">Semua Pesanan</a>
+    <nav class="navbar nav-underline navbar-light py-4">
+      <a href="#" data-status = "0" class="status-nav nav-link text-black">Semua</a>
       <a href="#" data-status = "1" class="status-nav nav-link text-black">Perlu Dikirim</a>
       <a href="#" data-status = "2" class="status-nav nav-link text-black">Dikirim</a>
       <a href="#" data-status = "3" class="status-nav nav-link text-black">Selesai</a>
@@ -67,7 +67,7 @@ require '../template/header2.php';
   //create pagination to large result from server
   
   let statusNav = document.querySelectorAll(".status-nav"); //Status Nav
-  console.log(statusNav[0]);
+  
   //  display table based on state options
   var currentStatusTab = 1; //initial status nav
   let tableBodyNode = document.getElementById("table-body");
@@ -113,7 +113,37 @@ require '../template/header2.php';
             default:
               ;
           }
-          recordsHtml += `<tr id=\"${record.id_pesanan}\"><td>${record.id_pesanan}</td><td>${record.tgl_pemesanan}</td><td>${record.item}</td><td>${record.nama_pelanggan}</td><td>Rp${record.total_pembayaran.toLocaleString('id-ID')}</td><td>${fieldStatus}</td><td><a href=\"#\" class=\"btn btn-info btn-sm text-white\">Lihat</a></td></tr>`;
+          let date = new Date(record.tgl_pemesanan);
+          let day = date.getDay();
+          let tglPemesanan = "";
+          switch(day){
+            case 0:
+              tglPemesanan += `Minggu, `;
+              break;
+            case 1:
+              tglPemesanan += `Senin, `;
+              break;
+            case 2:
+              tglPemesanan += `Selasa, `;
+              break;
+            case 3:
+              tglPemesanan += `Rabu, `;
+              break;
+            case 4:
+              tglPemesanan += `Kamis, `;
+              break;
+            case 5:
+              tglPemesanan += `Jumat, `;
+              break;
+            case 6:
+              tglPemesanan += `Sabtu, `;
+              break;
+            default:
+              ;
+          }
+          tglPemesanan += `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+          
+          recordsHtml += `<tr id=\"${record.id_pesanan}\"><td>${record.id_pesanan}</td><td>${tglPemesanan}</td><td>${record.item}</td><td>${record.nama_pelanggan}</td><td>Rp${record.total_pembayaran.toLocaleString('id-ID')}</td><td>${fieldStatus}</td><td><a href=\"#\" class=\"btn btn-info btn-sm text-white\">Lihat</a></td></tr>`;
         }
         tableBodyNode.innerHTML = recordsHtml;
         emptyTableNode.innerHTML = "";
@@ -124,18 +154,27 @@ require '../template/header2.php';
     }
   }
 
+  //Underlying current status nav
+  const displayStatusNav = () => {
+    statusNav.forEach((status) => {
+      let chosenStatus = parseInt(status.getAttribute("data-status"));
+      status.classList.toggle("active", chosenStatus === currentStatusTab);
+    });
+  }
+
   // give an event listener to status nav tab
   statusNav.forEach((status) =>{
     status.addEventListener("click", (e) => {
       e.preventDefault();
-      let page = parseInt(status.getAttribute("data-status"));
+      let chosenStatus = parseInt(status.getAttribute("data-status"));
       
-      console.log(status.classList);
-      if(page !== currentStatusTab){
-        currentStatusTab = page;
+      if(chosenStatus !== currentStatusTab){
+        currentStatusTab = chosenStatus;
         fetchPesanan(currentStatusTab);
+        displayStatusNav();
       }
     });
+    displayStatusNav();
   });
 
   fetchPesanan(currentStatusTab);
