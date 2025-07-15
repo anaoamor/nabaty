@@ -64,11 +64,10 @@ require '../template/header2.php';
   //create event listener to connect a table row to a specific pesanan detail
   
   //execute search query using keyword
-  //create pagination to large result from server
-  
-  let statusNav = document.querySelectorAll(".status-nav"); //Status Nav
   
   //  display table based on state options
+  
+  let statusNav = document.querySelectorAll(".status-nav"); //Status Nav
   var currentStatusTab = 1; //initial status nav
   let tableBodyNode = document.getElementById("table-body");
   let emptyTableNode = document.getElementById("empty-table-div");
@@ -82,16 +81,17 @@ require '../template/header2.php';
       }
       
       //get JSON value from response object
-      let pesanan = await response.json();
-      
+      let jsonData = await response.json();
+      // let objPesanan = JSON.parse(jsonData);
+      console.log(jsonData);
       //Displaying the result
       let recordsHtml = "";
-      if(pesanan.length == 0){
+      if(jsonData.length == 0){
         recordsHtml = `<p class=\"text-sm-center table-empty\">Kosong</p>`;
         tableBodyNode.innerHTML = "";
         emptyTableNode.innerHTML = recordsHtml;  
       }else{
-        for(let record of pesanan){
+        for(let record of jsonData){
           //Column Status
           let fieldStatus = "";
           switch(record.status_pesanan){
@@ -143,7 +143,7 @@ require '../template/header2.php';
           }
           tglPemesanan += `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
           
-          recordsHtml += `<tr id=\"${record.id_pesanan}\"><td>${record.id_pesanan}</td><td>${tglPemesanan}</td><td>${record.item}</td><td>${record.nama_pelanggan}</td><td>Rp${record.total_pembayaran.toLocaleString('id-ID')}</td><td>${fieldStatus}</td><td><a href=\"#\" class=\"btn btn-info btn-sm text-white\">Lihat</a></td></tr>`;
+          recordsHtml += `<tr id=\"${record.id_pesanan}\" class=\"pesanan-record\"><td>${record.id_pesanan}</td><td>${tglPemesanan}</td><td>${record.item}</td><td>${record.nama_pelanggan}</td><td>Rp${record.total_pembayaran.toLocaleString('id-ID')}</td><td>${fieldStatus}</td><td><a href=\"#\" class=\"btn btn-info btn-sm text-white\">Lihat</a></td></tr>`;
         }
         tableBodyNode.innerHTML = recordsHtml;
         emptyTableNode.innerHTML = "";
