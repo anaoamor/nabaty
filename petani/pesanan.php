@@ -23,7 +23,7 @@ require '../template/header2.php';
     <div class="py-1 d-flex justify-content-end align-items-center">
       <form class="w-50 ms-4 me-1" method="get">
         <div class="input-group">
-          <input type="text" name="search" class="form-control" placeholder="ID Pesanan / Pelanggan">
+          <input type="text" name="search" id="search" class="form-control" placeholder="Pelanggan" onkeyup="filterPesanan()">
           <input type="submit" class="btn btn-outline-secondary" value="Cari">
         </div>
       </form>
@@ -39,7 +39,7 @@ require '../template/header2.php';
       <a href="#" data-status = "5" class="status-nav nav-link text-black">Pengembalian</a>
     </nav>
 
-    <table class="table table-striped align-middle mt-3">
+    <table class="table table-striped align-middle mt-3" id="pesanan-table">
       <thead>
         <tr>
           <th>ID Pesanan</th>
@@ -62,15 +62,13 @@ require '../template/header2.php';
 </div>
 <script>
   //create event listener to connect a table row to a specific pesanan detail
-  
-  //execute search query using keyword
-  
+
   //  display table based on state options
-  
   let statusNav = document.querySelectorAll(".status-nav"); //Status Nav
   var currentStatusTab = 1; //initial status nav
   let tableBodyNode = document.getElementById("table-body");
   let emptyTableNode = document.getElementById("empty-table-div");
+  let tableNode = document.getElementById("pesanan-table");
 
   //Fetch record pesanan from server
   const fetchPesanan = async (status) =>{
@@ -178,6 +176,28 @@ require '../template/header2.php';
   });
 
   fetchPesanan(currentStatusTab);
+
+  //Filter for query search
+  const filterPesanan = () => {
+    let searchNode = document.getElementById("search");
+    let filter = searchNode.value.toUpperCase();
+    let trNode = tableNode.getElementsByTagName("tr");
+    
+    for(let i = 0; i < trNode.length; i++){
+      let namaTdNode = trNode[i].getElementsByTagName("td")[3];
+      
+      if(namaTdNode){
+        console.log(namaTdNode);
+        let tdValue = namaTdNode.textContent || namaTdNode.innerText;
+        if(tdValue.toUpperCase().indexOf(filter) > -1){
+          trNode[i].style.display = "";
+        }else{
+          trNode[i].style.display = "none";
+        }
+      }
+    }
+    
+  }
 </script>
 <?php
 require '../template/footer2.php';
