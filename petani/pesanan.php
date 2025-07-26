@@ -39,7 +39,7 @@ require '../template/header2.php';
       <a href="#" data-status = "5" class="status-nav nav-link text-black">Pengembalian</a>
     </nav>
 
-    <table class="table table-striped align-middle mt-3" id="pesanan-table">
+    <table class="table table-hover table-striped align-middle mt-3" id="pesanan-table">
       <thead>
         <tr>
           <th>ID Pesanan</th>
@@ -69,7 +69,7 @@ require '../template/header2.php';
   let tableBodyNode = document.getElementById("table-body");
   let emptyTableNode = document.getElementById("empty-table-div");
   let tableNode = document.getElementById("pesanan-table");
-
+ 
   //Fetch record pesanan from server
   const fetchPesanan = async (status) =>{
     try{
@@ -80,13 +80,11 @@ require '../template/header2.php';
       
       //get JSON value from response object
       let jsonData = await response.json();
-      // let objPesanan = JSON.parse(jsonData);
-      console.log(jsonData);
+      
       //Displaying the result
       let recordsHtml = "";
       if(jsonData.length == 0){
         recordsHtml = `<p class=\"text-sm-center table-empty\">Kosong</p>`;
-        tableBodyNode.innerHTML = "";
         emptyTableNode.innerHTML = recordsHtml;  
       }else{
         for(let record of jsonData){
@@ -141,9 +139,27 @@ require '../template/header2.php';
           }
           tglPemesanan += `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
           
-          recordsHtml += `<tr id=\"${record.id_pesanan}\" class=\"pesanan-record\"><td>${record.id_pesanan}</td><td>${tglPemesanan}</td><td>${record.item}</td><td>${record.nama_pelanggan}</td><td>Rp${record.total_pembayaran.toLocaleString('id-ID')}</td><td>${fieldStatus}</td><td><a href=\"#\" class=\"btn btn-info btn-sm text-white\">Lihat</a></td></tr>`;
+          let row = tableBodyNode.insertRow();
+
+          let idCell = row.insertCell(0);
+          let waktuCell = row.insertCell(1);
+          let itemCell = row.insertCell(2);
+          let pelangganCell = row.insertCell(3);
+          let totalPembayaranCell = row.insertCell(4);
+          let statusCell = row.insertCell(5);
+          let aksiCell = row.insertCell(6);
+          idCell.innerText = record.id_pesanan;
+          waktuCell.innerText = tglPemesanan;
+          itemCell.innerText = record.item;
+          pelangganCell.innerText = record.nama_pelanggan;
+          totalPembayaranCell.innerText = record.total_pembayaran.toLocaleString('id-ID');
+          statusCell.innerText = fieldStatus;
+          aksiCell.innerHTML = `<a href=\"detail_pesanan.php?id_pesanan=${record.id_pesanan}\" class=\"btn btn-info btn-sm text-white\">Lihat</a>`;
+          row.addEventListener("click", () =>{
+            window.location.href = "detail_pesanan.php?id_pesanan="+record.id_pesanan;
+          });
         }
-        tableBodyNode.innerHTML = recordsHtml;
+        
         emptyTableNode.innerHTML = "";
       }
       
@@ -177,17 +193,17 @@ require '../template/header2.php';
 
   fetchPesanan(currentStatusTab);
 
+  let trNode = tableNode.getElementsByTagName("tr");
+ 
   //Filter for query search
   const filterPesanan = () => {
     let searchNode = document.getElementById("search");
     let filter = searchNode.value.toUpperCase();
-    let trNode = tableNode.getElementsByTagName("tr");
-    
+
     for(let i = 0; i < trNode.length; i++){
       let namaTdNode = trNode[i].getElementsByTagName("td")[3];
       
       if(namaTdNode){
-        console.log(namaTdNode);
         let tdValue = namaTdNode.textContent || namaTdNode.innerText;
         if(tdValue.toUpperCase().indexOf(filter) > -1){
           trNode[i].style.display = "";
