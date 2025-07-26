@@ -57,10 +57,10 @@
             break;
           }
 
-          if($_POST['tipe'] == 1){ 
-            $output .= "<li><a href='tampil_penjualan.php?id_pesanan={$recordNotifikasi->id_pesanan}' class='dropdown-item'><div class='d-flex justify-content-between'><h4>ID Pesanan : {$recordNotifikasi->id_pesanan}</h4><h4><small><small><small class='text-muted'>{$tampilWaktu}</small></small></small></h4></div><p style='font-size:17px;'>{$tampilNotifikasi}</p></a></li>";
-          }else if($_POST['tipe'] == 2){
-            $output .= "<a href='tampil_penjualan.php?id_pesanan={$recordNotifikasi->id_pesanan}' class='list-group-item list-group-item-action'><div class='d-flex w-100 justify-content-between'><h6 class='mb-1'>ID Pesanan : {$recordNotifikasi->id_pesanan}</h6><small>{$tampilWaktu}</small></div><p class='mb-1'>{$tampilNotifikasi}</p></a>";
+          if($_POST['tipe'] == 1){ //for dropdown notifications
+            $output .= "<li><a href='detail_pesanan.php?id_pesanan={$recordNotifikasi->id_pesanan}' class='dropdown-item'><div class='d-flex justify-content-between'><h4>ID Pesanan : {$recordNotifikasi->id_pesanan}</h4><h4><small><small><small class='text-muted'>{$tampilWaktu}</small></small></small></h4></div><p style='font-size:17px;'>{$tampilNotifikasi}</p></a></li>";
+          }else if($_POST['tipe'] == 2){ //for notifikasi page
+            $output .= "<a href='detail_pesanan.php?id_pesanan={$recordNotifikasi->id_pesanan}' class='list-group-item list-group-item-action'><div class='d-flex w-100 justify-content-between'><h6 class='mb-1'>ID Pesanan : {$recordNotifikasi->id_pesanan}</h6><small>{$tampilWaktu}</small></div><p class='mb-1'>{$tampilNotifikasi}</p></a>";
           }
           
         }
