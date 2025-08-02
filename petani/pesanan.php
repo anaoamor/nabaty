@@ -46,7 +46,7 @@ require '../template/header2.php';
           <th>Waktu</th>
           <th>Item</th>
           <th>Pelanggan</th>
-          <th>Total Pembayaran</th>
+          <th>Total Pembayaran (Rp)</th>
           <th>Status</th>
           <th>Aksi</th>
         </tr>
@@ -80,6 +80,7 @@ require '../template/header2.php';
       
       //get JSON value from response object
       let jsonData = await response.json();
+      tableBodyNode.innerHTML = "";//clear the table before
       
       //Displaying the result
       let recordsHtml = "";
@@ -137,7 +138,7 @@ require '../template/header2.php';
             default:
               ;
           }
-          tglPemesanan += `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+          tglPemesanan += `${date.getDate().toString().padStart(2,"0")}-${(date.getMonth()+1).toString().padStart(2,"0")}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
           
           let row = tableBodyNode.insertRow();
 
