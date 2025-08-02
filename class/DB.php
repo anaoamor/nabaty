@@ -257,6 +257,7 @@ class DB{
   }
 
   //Method to get data from multiple tables(3 or more)
+  //$joinArray[[$join_type,[$first_table,$second_table],$column_join]], [..,[],..]..]
   public function getMultipleTable($joinArray, $conditions = "", $bindValue  = []){
     $query = "SELECT {$this->_columnName} FROM {$joinArray[0][1][0]} {$joinArray[0][0]} {$joinArray[0][1][1]} ON {$joinArray[0][1][0]}.{$joinArray[0][2]} = {$joinArray[0][1][1]}.{$joinArray[0][2]}";
     for($i = 1; $i<count($joinArray); $i++){
@@ -269,7 +270,8 @@ class DB{
     return $this->getQuery($query, $bindValue);
   }
 
-  //Method to get data from multiple tables and conditions
+  //Method to get data from multiple tables, conditions. 
+  //Operators to joining more than one conditions, such AND, OR.
   public function getMultipleTableConditions($joinArray, $conditions, $operators = []){
     //check whether the $operators var is empty or not
     if(count($operators) === 0){
